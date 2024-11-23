@@ -66,9 +66,11 @@ namespace CodeGenerator
             {
                 JProperty jp = (JProperty)jt;
                 string name = jp.Name;
+#if DO_STRIP_INTERNAL                
                 if (typeLocations?[jp.Name]?.Value<string>().Contains("internal") ?? false) {
                     return null;
                 }
+#endif                
                 EnumMember[] elements = jp.Values().Select(v =>
                 {
                     return new EnumMember(v["name"].ToString(), v["calc_value"].ToString());
@@ -80,9 +82,11 @@ namespace CodeGenerator
             {
                 JProperty jp = (JProperty)jt;
                 string name = jp.Name;
+#if DO_STRIP_INTERNAL                
                 if (typeLocations?[jp.Name]?.Value<string>().Contains("internal") ?? false) {
                     return null;
                 }
+#endif                
                 TypeReference[] fields = jp.Values().Select(v =>
                 {
                     if (v["type"].ToString().Contains("static")) { return null; }
@@ -121,7 +125,9 @@ namespace CodeGenerator
                         }
                     }
                     if (friendlyName == null) { return null; }
+#if DO_STRIP_INTERNAL                
                     if (val["location"]?.ToString().Contains("internal") ?? false) return null;
+#endif                    
 
                     string exportedName = ov_cimguiname;
                     if (exportedName == null)
