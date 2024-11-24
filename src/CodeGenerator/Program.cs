@@ -110,7 +110,7 @@ namespace CodeGenerator
                 using (CSharpCodeWriter writer = new CSharpCodeWriter(Path.Combine(outputPath, td.Name + ".gen.cs")))
                 {
                     writer.Using("System");
-                    writer.Using("System.Numerics");
+                    writer.Using("UnityEngine");
                     writer.Using("System.Runtime.CompilerServices");
                     writer.Using("System.Text");
                     if (referencesImGui)
@@ -278,7 +278,7 @@ namespace CodeGenerator
             using (CSharpCodeWriter writer = new CSharpCodeWriter(Path.Combine(outputPath, $"{classPrefix}Native.gen.cs")))
             {
                 writer.Using("System");
-                writer.Using("System.Numerics");
+                writer.Using("UnityEngine");
                 writer.Using("System.Runtime.InteropServices");
                 if (referencesImGui)
                 {
@@ -350,7 +350,7 @@ namespace CodeGenerator
             using (CSharpCodeWriter writer = new CSharpCodeWriter(Path.Combine(outputPath, $"{classPrefix}.gen.cs")))
             {
                 writer.Using("System");
-                writer.Using("System.Numerics");
+                writer.Using("UnityEngine");
                 writer.Using("System.Runtime.InteropServices");
                 writer.Using("System.Text");
                 if (referencesImGui)

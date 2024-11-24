@@ -82,11 +82,29 @@ namespace CodeGenerator
             {
                 JProperty jp = (JProperty)jt;
                 string name = jp.Name;
-#if DO_STRIP_INTERNAL                
                 if (typeLocations?[jp.Name]?.Value<string>().Contains("internal") ?? false) {
+#if DO_STRIP_INTERNAL                
                     return null;
-                }
+#else
+                    switch (name)
+                    {
+    #if false // These will cause issues, could be lots more                        
+                        case "ImGuiTable":
+                        case "ImGuiKeyRoutingTable":
+                        case "ImGuiKeyRoutingData":
+                        case "ImGuiInputEvent":
+                        case "ImGuiStyleMod":
+                        case "ImGuiContext":
+                            return null;
+                        default:
+                            break;
+    #else
+                        default:
+                            return null;
+    #endif
+                    }                    
 #endif                
+                }
                 TypeReference[] fields = jp.Values().Select(v =>
                 {
                     if (v["type"].ToString().Contains("static")) { return null; }
@@ -125,9 +143,29 @@ namespace CodeGenerator
                         }
                     }
                     if (friendlyName == null) { return null; }
+                    if (val["location"]?.ToString().Contains("internal") ?? false)
+                    {
 #if DO_STRIP_INTERNAL                
-                    if (val["location"]?.ToString().Contains("internal") ?? false) return null;
+                        return null;
+#else
+                        switch (friendlyName)
+                        {
+    #if false                            
+                            case "ImGuiStyleMod":
+                            case "ImGuiInputEvent":
+                                return null;
+                            default:
+                                break; 
+    #else                              
+                            case "BeginDisabledOverrideReenable":
+                                break;  
+
+                            default:
+                                return null;
+    #endif                                
+                        }
 #endif                    
+                    }
 
                     string exportedName = ov_cimguiname;
                     if (exportedName == null)
@@ -157,6 +195,13 @@ namespace CodeGenerator
                     {
                         string pType = p["type"].ToString();
                         string pName = p["name"].ToString();
+
+                        // There are a few functions that take an argument with the name of "base" which is a reserved
+                        // keyword in c#, so we'll replace that parameter/argument name with "base_"
+                        if (pName == "base")
+                        {
+                            pName = "base_";
+                        }
 
                         // if there are possible variants for this method then try to match them based on the parameter name and expected type
                         ParameterVariant matchingVariant = methodVariants?.Parameters.Where(pv => pv.Name == pName && pv.OriginalType == pType).FirstOrDefault() ?? null;
