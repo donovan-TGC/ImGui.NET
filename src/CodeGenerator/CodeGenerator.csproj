@@ -9,6 +9,7 @@
     <Content Include="definitions\cimgui\structs_and_enums.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="definitions\cimgui\definitions.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="definitions\cimgui\variants.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="definitions\cimgui\whitelisted_internals.json" CopyToOutputDirectory="PreserveNewest" />
 
     <Content Include="definitions\cimplot\structs_and_enums.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="definitions\cimplot\definitions.json" CopyToOutputDirectory="PreserveNewest" />

@@ -1,0 +1,11 @@
+{
+    "Enums": [
+    ],
+    "Types": [
+    ],
+    "Functions": [
+        "BeginDisabledOverrideReenable",
+        "RenderArrow",
+        "CalcItemSize"
+    ]
+}

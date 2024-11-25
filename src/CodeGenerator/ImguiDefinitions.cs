@@ -11,6 +11,15 @@ namespace CodeGenerator
 {
     class ImguiDefinitions
     {
+        public class WhiteListedInternal
+        {
+            public HashSet<string> Enums = new();
+            public HashSet<string> Types = new();
+            public HashSet<string> Functions = new();
+        }
+        public WhiteListedInternal WhiteListed;
+
+
         public EnumDefinition[] Enums;
         public TypeDefinition[] Types;
         public FunctionDefinition[] Functions;
@@ -24,6 +33,15 @@ namespace CodeGenerator
         }
         public void LoadFrom(string directory)
         {
+            try
+            {
+                string json = System.IO.File.ReadAllText(Path.Combine(directory, "whitelisted_internals.json"));
+                WhiteListed = JsonConvert.DeserializeObject<WhiteListedInternal>(json);
+            }
+            catch (Exception ex)
+            {
+                WhiteListed = new();
+            }
             
             JObject typesJson;
             using (StreamReader fs = File.OpenText(Path.Combine(directory, "structs_and_enums.json")))
@@ -66,11 +84,12 @@ namespace CodeGenerator
             {
                 JProperty jp = (JProperty)jt;
                 string name = jp.Name;
-#if DO_STRIP_INTERNAL                
                 if (typeLocations?[jp.Name]?.Value<string>().Contains("internal") ?? false) {
-                    return null;
+                    if (!WhiteListed.Enums.Contains(name))
+                    {
+                        return null;
+                    }
                 }
-#endif                
                 EnumMember[] elements = jp.Values().Select(v =>
                 {
                     return new EnumMember(v["name"].ToString(), v["calc_value"].ToString());
@@ -83,27 +102,10 @@ namespace CodeGenerator
                 JProperty jp = (JProperty)jt;
                 string name = jp.Name;
                 if (typeLocations?[jp.Name]?.Value<string>().Contains("internal") ?? false) {
-#if DO_STRIP_INTERNAL                
-                    return null;
-#else
-                    switch (name)
+                    if (!WhiteListed.Types.Contains(name))
                     {
-    #if false // These will cause issues, could be lots more                        
-                        case "ImGuiTable":
-                        case "ImGuiKeyRoutingTable":
-                        case "ImGuiKeyRoutingData":
-                        case "ImGuiInputEvent":
-                        case "ImGuiStyleMod":
-                        case "ImGuiContext":
-                            return null;
-                        default:
-                            break;
-    #else
-                        default:
-                            return null;
-    #endif
-                    }                    
-#endif                
+                        return null;
+                    }
                 }
                 TypeReference[] fields = jp.Values().Select(v =>
                 {
@@ -145,26 +147,10 @@ namespace CodeGenerator
                     if (friendlyName == null) { return null; }
                     if (val["location"]?.ToString().Contains("internal") ?? false)
                     {
-#if DO_STRIP_INTERNAL                
-                        return null;
-#else
-                        switch (friendlyName)
+                        if (!WhiteListed.Functions.Contains(friendlyName))
                         {
-    #if false                            
-                            case "ImGuiStyleMod":
-                            case "ImGuiInputEvent":
-                                return null;
-                            default:
-                                break; 
-    #else                              
-                            case "BeginDisabledOverrideReenable":
-                                break;  
-
-                            default:
-                                return null;
-    #endif                                
+                            return null;
                         }
-#endif                    
                     }
 
                     string exportedName = ov_cimguiname;
