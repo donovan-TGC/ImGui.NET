@@ -5,6 +5,7 @@
     ],
     "Functions": [
         "BeginDisabledOverrideReenable",
+        "EndDisabledOverrideReenable",
         "RenderArrow",
         "CalcItemSize"
     ]

@@ -1,5 +1,5 @@
 using System;
-using System.Numerics;
+using UnityEngine;
 using System.Runtime.InteropServices;
 
 namespace ImGuiNET
@@ -22,6 +22,8 @@ namespace ImGuiNET
         public static extern byte igBeginCombo(byte* label, byte* preview_value, ImGuiComboFlags flags);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void igBeginDisabled(byte disabled);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void igBeginDisabledOverrideReenable();
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern byte igBeginDragDropSource(ImGuiDragDropFlags flags);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
@@ -64,6 +66,8 @@ namespace ImGuiNET
         public static extern void igBulletText(byte* fmt);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern byte igButton(byte* label, Vector2 size);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void igCalcItemSize(Vector2* pOut, Vector2 size, float default_w, float default_h);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern float igCalcItemWidth();
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
@@ -158,6 +162,8 @@ namespace ImGuiNET
         public static extern void igEndCombo();
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void igEndDisabled();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void igEndDisabledOverrideReenable();
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void igEndDragDropSource();
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
@@ -520,6 +526,8 @@ namespace ImGuiNET
         public static extern byte igRadioButton_IntPtr(byte* label, int* v, int v_button);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void igRender();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void igRenderArrow(ImDrawList* draw_list, Vector2 pos, uint col, ImGuiDir dir, float scale);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void igRenderPlatformWindowsDefault(void* platform_render_arg, void* renderer_render_arg);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]

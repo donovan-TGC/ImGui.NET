@@ -1,5 +1,5 @@
 using System;
-using System.Numerics;
+using UnityEngine;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -840,6 +840,10 @@ namespace ImGuiNET
         {
             byte native_disabled = disabled ? (byte)1 : (byte)0;
             ImGuiNative.igBeginDisabled(native_disabled);
+        }
+        public static void BeginDisabledOverrideReenable()
+        {
+            ImGuiNative.igBeginDisabledOverrideReenable();
         }
         public static bool BeginDragDropSource()
         {
@@ -2499,6 +2503,12 @@ namespace ImGuiNET
                 Util.Free(native_label);
             }
             return ret != 0;
+        }
+        public static Vector2 CalcItemSize(Vector2 size, float default_w, float default_h)
+        {
+            Vector2 __retval;
+            ImGuiNative.igCalcItemSize(&__retval, size, default_w, default_h);
+            return __retval;
         }
         public static float CalcItemWidth()
         {
@@ -12462,6 +12472,10 @@ namespace ImGuiNET
         {
             ImGuiNative.igEndDisabled();
         }
+        public static void EndDisabledOverrideReenable()
+        {
+            ImGuiNative.igEndDisabledOverrideReenable();
+        }
         public static void EndDragDropSource()
         {
             ImGuiNative.igEndDragDropSource();
@@ -20390,6 +20404,17 @@ namespace ImGuiNET
         public static void Render()
         {
             ImGuiNative.igRender();
+        }
+        public static void RenderArrow(ImDrawListPtr draw_list, Vector2 pos, uint col, ImGuiDir dir)
+        {
+            ImDrawList* native_draw_list = draw_list.NativePtr;
+            float scale = 1.0f;
+            ImGuiNative.igRenderArrow(native_draw_list, pos, col, dir, scale);
+        }
+        public static void RenderArrow(ImDrawListPtr draw_list, Vector2 pos, uint col, ImGuiDir dir, float scale)
+        {
+            ImDrawList* native_draw_list = draw_list.NativePtr;
+            ImGuiNative.igRenderArrow(native_draw_list, pos, col, dir, scale);
         }
         public static void RenderPlatformWindowsDefault()
         {
